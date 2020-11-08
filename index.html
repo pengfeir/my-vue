@@ -14,16 +14,17 @@
           return {
             // name: "pengfei",
             // a: { b: { e: 2 } },
-            b: [1, { a: 1 }],
+            a: 4,
           };
         },
       });
-      console.log(vm._data);
+      console.log(vm, "vm");
       // vm._data.a = { c: 1 };
       // vm._data.a.c = 1;
       // vm._data.b.push(2);
-      vm._data.b.push({ name: 2 });
+      // vm._data.b[1] = 3;
       // console.log(vm._data);
+      vm.a = 10;
     </script>
   </body>
 </html>

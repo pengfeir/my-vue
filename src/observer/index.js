@@ -1,12 +1,9 @@
+import { defineProperty } from "../utils";
 import { arrayMethods } from "./array";
 
 class Observer {
   constructor(value) {
-    Object.defineProperty(value, "__ob__", {
-      enumerable: false, //不能枚举，不能循环出来，防止遍历value的时候被遍历出来
-      configurable: false,
-      value: this,
-    });
+    defineProperty(value, "__ob__", this);
     //判断是否数组，数组的话不添加拦截，因为数组太长的话会导致性能很差，
     // 一般操作数组shift,push,slice,所以拦截这些方法
     if (Array.isArray(value)) {
@@ -25,6 +22,7 @@ class Observer {
   }
   walk(value) {
     let keys = Object.keys(value);
+    console.log("keys", keys, value);
     keys.forEach((key) => {
       defineReactive(value, key, value[key]);
     });
@@ -38,7 +36,7 @@ function defineReactive(data, key, value) {
       return value;
     },
     set(newValue) {
-      console.log("设置值了", data, key, newValue);
+      console.log("设置值了", data, key, value, newValue);
       if (newValue === value) return;
       observe(newValue); //如果用户把值改成对象继续监控
       value = newValue;
