@@ -1,3 +1,8 @@
+<!--
+ * @Date: 2020-11-16 14:33:53
+ * @LastEditors: pengfei
+ * @LastEditTime: 2020-11-16 17:45:24
+-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,13 +11,14 @@
     <title>Document</title>
   </head>
   <body>
+    <div id="app"><p id="b" b="1" style="background: red">{{name}}</p><span>测试文本</span>测试纯文本{{a}}</div>
     <script src="./dist/umd/vue.js"></script>
     <script>
       let vm = new Vue({
         el: "#app",
         data() {
           return {
-            // name: "pengfei",
+            name: "pengfei",
             // a: { b: { e: 2 } },
             a: 4,
           };

@@ -1,3 +1,8 @@
+/*
+ * @Date: 2020-11-16 14:33:53
+ * @LastEditors: pengfei
+ * @LastEditTime: 2020-11-16 15:26:54
+ */
 export function proxy(vm, data, key) {
   Object.defineProperty(vm, key, {
     get() {
@@ -15,3 +20,15 @@ export function defineProperty(target, key, value) {
     value,
   });
 }
+function makeUp(str) {
+  const map = {
+
+  }
+  str.split(',').forEach(tagName => {
+      map[tagName] = true;
+  })
+  return (tag)=> map[tag] || false;
+}
+
+export const isReservedTag = makeUp('a,p,div,ul,li,span,input,button')
+export const isObject = (val) => typeof val == 'object' && val != null

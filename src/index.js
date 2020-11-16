@@ -1,4 +1,11 @@
+/*
+ * @Date: 2020-11-16 14:33:53
+ * @LastEditors: pengfei
+ * @LastEditTime: 2020-11-16 15:30:40
+ */
 import { initMixin } from "./init";
+import { lifecycleMixin } from "./lifecycle";
+import { renderMixin } from "./render";
 //此文件在构造函数原型上扩展方法
 
 // options Api
@@ -8,4 +15,6 @@ function Vue(options) {
   this._init(options);
 }
 initMixin(Vue);
+lifecycleMixin(Vue); // 扩展update方法 更新逻辑
+renderMixin(Vue); // 扩展_render方法，调用render方法的逻辑
 export default Vue;
