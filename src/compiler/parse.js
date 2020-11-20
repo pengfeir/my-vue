@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 15:05:56
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-16 17:40:36
+ * @LastEditTime: 2020-11-17 16:45:26
  */
 // import { chartreuse } from "color-name";
 
@@ -128,7 +128,6 @@ export function parseHTML(html) {
     let text;
     if (textEnd >= 0) {
       text = html.substring(0, textEnd);
-      console.log("文本: " + text);
     }
     if (text) {
       advance(text.length);

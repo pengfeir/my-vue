@@ -10,6 +10,5 @@ export function compileToFunction(template) {
   let code = generate(ast); //生成ast语法树
   let render = `with(this){return ${code}}`; //with语法给template传参数
   let fn = new Function(render); // 可以让字符串变成一个函数
-  console.log('fn',fn)
   return fn;
 }

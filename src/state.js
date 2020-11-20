@@ -1,3 +1,8 @@
+/*
+ * @Date: 2020-11-16 14:33:53
+ * @LastEditors: pengfei
+ * @LastEditTime: 2020-11-19 16:50:48
+ */
 import { observe } from "./observer/index";
 import { proxy } from "./utils";
 export function initState(vm) {
@@ -26,6 +31,7 @@ function initData(vm) {
   for (let key in data) {
     proxy(vm, "_data", key);
   }
+  console.log(data,"********")
   observe(data);
 }
 function initComputed() {}

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:42:10
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-16 17:50:11
+ * @LastEditTime: 2020-11-17 16:44:52
  */
 import { createElement, createTextVnode } from "./vdom/index";
 export function renderMixin(Vue) {
@@ -26,7 +26,6 @@ export function renderMixin(Vue) {
     const vm = this;
     let render = vm.$options.render; // 获取编译后的render方法
     let vnode = render.call(vm); // _(xxx,xxx,xxx,xxx) 调用时会自动将变量进行取值，将实例结果进行渲染
-    console.log("vnode", vnode);
     return vnode; // 虚拟节点
 
     // _c('div',{},_c())
