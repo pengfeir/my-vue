@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:42:47
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-19 17:48:24
+ * @LastEditTime: 2020-11-20 16:02:19
  */
 import { patch } from "./vdom/patch";
 import Watcher from './observer/watcher';
@@ -35,11 +35,13 @@ export function mountComponent(vm, el) {
   // 默认Vue是通过watcher来进行渲染  = 渲染watcher （每一个组件都有一个渲染watcher）
   callHook(vm,'beforeMount')
   let updateComponent = () => {
-    console.log('updateComponent*****************')
+    console.log('updateComponent***********************')
     vm._update(vm._render()); // 把虚拟节点渲染成真正的节点
   };
   // 每次数据变化 就执行 updateComponent 方法 进行更新操作
-  new Watcher(vm, updateComponent, () => {}, true);
+  new Watcher(vm, updateComponent, () => {
+    callHook(vm,'updated')
+  }, true);
   callHook(vm,'mounted')
   // new Watcher(vm, updateComponent, ()=>{ }, true) // updateComponent();
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-19 17:56:15
+ * @LastEditTime: 2020-11-20 14:55:19
  */
 let oldArrayProtoMethods = Array.prototype;
 export let arrayMethods = Object.create(oldArrayProtoMethods);
@@ -24,7 +24,7 @@ methods.forEach((method) => {
         break;
     }
     if (inserted) ob.observeArray(args);
-    // ob.dep.notify();
+    ob.dep.notify();
     return result;
   };
 });

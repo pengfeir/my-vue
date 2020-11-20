@@ -1,14 +1,14 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-19 17:55:44
+ * @LastEditTime: 2020-11-20 15:50:36
  */
 import { defineProperty } from "../utils";
 import { arrayMethods } from "./array";
 import Dep from './dep';
 class Observer {
   constructor(value) {
-    // this.dep = new Dep();
+    this.dep = new Dep();
     defineProperty(value, "__ob__", this);
     //判断是否数组，数组的话不添加拦截，因为数组太长的话会导致性能很差，
     // 一般操作数组shift,push,slice,所以拦截这些方法
@@ -28,7 +28,6 @@ class Observer {
   }
   walk(value) {
     let keys = Object.keys(value);
-    console.log("keys", keys, value);
     keys.forEach((key) => {
       defineReactive(value, key, value[key]);
     });
@@ -48,13 +47,12 @@ function defineReactive(data, key, value) {
   let dep = new Dep(); // 每次都会给属性创建一个dep
   Object.defineProperty(data, key, {
     get() {
-      console.log("用户取值了", data, key, value);
       if (Dep.target) {
         dep.depend(); // 让这个属性自己的dep记住这个watcher，也要让watcher记住这个dep
 
         // childOb 可能是对象 也可能是数组
         if (childOb) { // 如果对数组取值 会将当前的watcher和数组进行关联
-            // childOb.dep.depend();
+            childOb.dep.depend();
             if (Array.isArray(value)) {
                 dependArray(value)
             }
@@ -63,7 +61,6 @@ function defineReactive(data, key, value) {
       return value;
     },
     set(newValue) {
-      console.log("设置值了", data, key, value, newValue);
       if (newValue === value) return;
       observe(newValue); //如果用户把值改成对象继续监控
       value = newValue;

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-17 17:04:48
+ * @LastEditTime: 2020-11-20 15:51:14
  */
 import { compileToFunction } from "./compiler/index";
 import { initState } from "./state";
@@ -17,7 +17,6 @@ export function initMixin(Vue) {
     // 全局组件init的时候会挂在vue上
     //初始化状态
     vm.$options = mergeOptions(vm.constructor.options, options);
-       console.log(vm.$options);
        // 初始化状态
        callHook(vm, 'beforeCreate');
        initState(vm);

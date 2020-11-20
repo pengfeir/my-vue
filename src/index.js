@@ -1,12 +1,14 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-17 15:23:23
+ * @LastEditTime: 2020-11-20 15:53:26
  */
 import { initMixin } from "./init";
 import { lifecycleMixin } from "./lifecycle";
 import { renderMixin } from "./render";
 import {initGlobalAPI} from './global-api/index'
+import { nextTick } from './observer/scheduler';
+
 //此文件在构造函数原型上扩展方法
 
 // options Api
@@ -15,6 +17,7 @@ import {initGlobalAPI} from './global-api/index'
 function Vue(options) {
   this._init(options);
 }
+Vue.prototype.$nextTick = nextTick
 initMixin(Vue);
 lifecycleMixin(Vue); // 扩展update方法 更新逻辑
 renderMixin(Vue); // 扩展_render方法，调用render方法的逻辑

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 15:20:41
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-16 17:49:44
+ * @LastEditTime: 2020-11-20 15:51:05
  */
 import { isObject, isReservedTag } from "../utils";
 
@@ -25,7 +25,6 @@ export function createElement(vm, tag, data = {}, ...children) {
 function createComponent(vm, tag, data, key, children, Ctor) {
   if (isObject(Ctor)) {
     Ctor = vm.$options._base.extend(Ctor);
-    console.log(Ctor);
   }
   // 给组件增加生命周期
   data.hook = {

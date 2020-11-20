@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-19 17:58:27
+ * @LastEditTime: 2020-11-20 15:55:18
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -58,17 +58,30 @@
         },
         mounted(){
           console.log("mounted");
+        },
+        update(){
+          console.log("updated")
         }
       });
-      console.log(vm, "vm");
       // vm._data.a = { c: 1 };
       // vm._data.a.c = 1;
       // vm._data.b.push(2);
       // vm._data.b[1] = 3;
       // console.log(vm._data);
       vm.a = 10;
+      //vue批处理，vue异步更新，更新数据后不能立刻拿到最新的节点
+      // nextTick等待页面更新后再获取最终dom
       setTimeout(()=>{
         vm.c.push(6)
+        vm.c.push(6)
+        vm.c.push(6)
+        vm.c.push(6)
+        vm.c.push(6)
+        vm.obj.name = 100
+        console.log(vm)
+        vm.$nextTick(()=>{
+        console.log('$netxTick')
+      })
       },5000)
     </script>
   </body>

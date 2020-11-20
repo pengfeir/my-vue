@@ -1,16 +1,16 @@
 /*
  * @Date: 2020-11-18 13:59:43
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-19 16:53:56
+ * @LastEditTime: 2020-11-20 16:08:25
  */
 import { pushTarget, popTarget } from "./dep";
 import { queueWatcher } from "./scheduler";
 
 let id = 0; // 做一个watcher 的id 每次创建watcher时 都有一个序号 
 // 目前写到这里 只有一个watcher 渲染watchrer，只要视图中使用到了这个属性，而且属性变化了就要更新视图
-
 class Watcher {
     constructor(vm, exprOrFn, cb, options) {
+      console.log("一个vue实例上几个watch")
         this.vm = vm;
         this.exprOrFn = exprOrFn;
         this.cb = cb;
@@ -20,7 +20,6 @@ class Watcher {
         if (typeof exprOrFn == 'function') {
             this.getter = exprOrFn;
         }
-
         this.id = id++;
         this.get();
     }
@@ -36,7 +35,6 @@ class Watcher {
         pushTarget(this); // 在取值之前 将watcher先保存起来
         this.getter(); // 这句话就实现了视图的渲染  -》 操作是取值 
         popTarget(); // 删掉watcher
-
         // Vue是组件级别更新的
     }
     addDep(dep) {
@@ -46,11 +44,11 @@ class Watcher {
             this.deps.push(dep);
             dep.addSub(this); // 让当前dep 订阅这个watcher
         }
-        console.log('this.deps******',this.deps)
     } 
     update(){ // 更新原理
-        queueWatcher(this); // 将watcher存储起来
-        // this.get();  // 以前调用get方法是直接更新视图
+      console.log('update******')
+        queueWatcher(this); // 将id不同watcher存储起来调用，做防抖处理节省性能
+        // this.get();  //直接掉get方法多次取值赋值会触发多次
     }
 }
 
