@@ -1,14 +1,14 @@
 /*
  * @Date: 2020-11-18 14:00:11
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-20 16:04:56
+ * @LastEditTime: 2020-11-24 15:22:49
  */
 let has = {}; // vue源码里有的时候去重用的是set 有的时候用的是对象来实现的去重
 let queue = [];
 
 // 这个队列是否正在等待更新
 function flushSchedulerQueue() {
-  queue.forEach(watcher=>{watcher.run();watcher.cb();})
+  queue.forEach(watcher=>{watcher.run()})
   queue = [];
   has = {};
 }

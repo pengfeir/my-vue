@@ -1,10 +1,11 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-20 15:51:30
+ * @LastEditTime: 2020-11-30 16:51:36
  */
 import { observe } from "./observer/index";
 import { proxy } from "./utils";
+import Watcher from './observer/watcher';
 export function initState(vm) {
   const opts = vm.$options;
   if (opts.props) {
@@ -20,7 +21,7 @@ export function initState(vm) {
     initComputed(vm);
   }
   if (opts.watch) {
-    initWatch(vm);
+    initWatch(vm, opts.watch);
   }
 }
 function initProps() {}
@@ -34,4 +35,54 @@ function initData(vm) {
   observe(data);
 }
 function initComputed() {}
-function initWatch() {}
+function initWatch(vm, watch) {
+  for (const key in watch) {
+    const handler = watch[key];
+    if (Array.isArray(handler)) {
+      for (let i = 0; i < handler.length; i++) {
+        createWatcher(vm, key, handler[i]);
+      }
+    } else {
+      createWatcher(vm, key, handler);
+    }
+  }
+}
+var _toString = Object.prototype.toString;
+function isPlainObject (obj) {
+  return _toString.call(obj) === '[object Object]'
+}
+function createWatcher(vm, expOrFn, handler, options) {
+  if (isPlainObject(handler)) {
+    options = handler;
+    handler = handler.handler;
+  }
+  if (typeof handler === "string") {
+    handler = vm[handler];
+  }
+  return vm.$watch(expOrFn, handler, options);
+}
+export function stateMixin (Vue) {
+
+  Vue.prototype.$watch = function (
+    expOrFn,
+    cb,
+    options
+  ) {
+    const vm = this
+    if (isPlainObject(cb)) {
+      return createWatcher(vm, expOrFn, cb, options)
+    }
+    options = options || {}
+    //增加标识，这是用户创建的watch
+    options.user = true
+    const watcher = new Watcher(vm, expOrFn, cb, options)
+    if (options.immediate) {
+      try {
+        cb.call(vm, watcher.value)
+      } catch (error) {
+        // handleError(error, vm, `callback for immediate watcher "${watcher.expression}"`)
+      }
+    }
+  }
+}
+
