@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-20 15:50:36
+ * @LastEditTime: 2020-12-01 11:23:28
  */
 import { defineProperty } from "../utils";
 import { arrayMethods } from "./array";
@@ -64,6 +64,7 @@ function defineReactive(data, key, value) {
       if (newValue === value) return;
       observe(newValue); //如果用户把值改成对象继续监控
       value = newValue;
+      console.log('dep.notify')
       dep.notify(); //通知dep中记录的watcher让它去执行 
     },
   });

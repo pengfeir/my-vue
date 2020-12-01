@@ -1,11 +1,12 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-30 16:51:36
+ * @LastEditTime: 2020-12-01 15:11:52
  */
 import { observe } from "./observer/index";
 import { proxy } from "./utils";
 import Watcher from './observer/watcher';
+import Dep from './observer/dep'
 export function initState(vm) {
   const opts = vm.$options;
   if (opts.props) {
@@ -18,7 +19,7 @@ export function initState(vm) {
     initData(vm);
   }
   if (opts.computed) {
-    initComputed(vm);
+    initComputed(vm,opts.computed);
   }
   if (opts.watch) {
     initWatch(vm, opts.watch);
@@ -34,7 +35,71 @@ function initData(vm) {
   }
   observe(data);
 }
-function initComputed() {}
+function initComputed(vm,computed) {
+  const watchers = vm._computedWatchers = Object.create(null)
+  for (const key in computed) {
+    const userDef = computed[key]
+    const getter = typeof userDef === 'function' ? userDef : userDef.get
+      watchers[key] = new Watcher(
+        vm,
+        getter || (()=>{}),
+        ()=>{},
+        { lazy: true }
+      )
+    if (!(key in vm)) {
+      defineComputed(vm, key, userDef)
+    } 
+  }
+}
+const sharedPropertyDefinition = {
+  enumerable: true,
+  configurable: true,
+  get: ()=>{},
+  set: ()=>{}
+}
+export function defineComputed (
+  target,
+  key,
+  userDef
+) {
+  const shouldCache = true
+  if (typeof userDef === 'function') {
+    sharedPropertyDefinition.get =  shouldCache
+    ? createComputedGetter(key)
+    : createGetterInvoker(userDef)
+    sharedPropertyDefinition.set = ()=>{}
+  } else {
+    sharedPropertyDefinition.get = userDef.get
+      ? shouldCache && userDef.cache !== false
+        ? createComputedGetter(key)
+        : createGetterInvoker(userDef.get)
+      : ()=>{}
+    sharedPropertyDefinition.set = userDef.set || (()=>{})
+  }
+  console.log("target==========",target)
+  Object.defineProperty(target, key, sharedPropertyDefinition)
+}
+function createComputedGetter (key) {
+  return function computedGetter () {
+    const watcher = this._computedWatchers && this._computedWatchers[key]
+    if (watcher) {
+      if (watcher.dirty) {
+        watcher.evaluate()
+      }
+      console.log('Dep.target',Dep.target)
+      if (Dep.target) {
+        watcher.depend()
+      }
+      return watcher.value
+    }
+  }
+}
+
+function createGetterInvoker(fn) {
+  return function computedGetter () {
+    return fn.call(this, this)
+  }
+}
 function initWatch(vm, watch) {
   for (const key in watch) {
     const handler = watch[key];

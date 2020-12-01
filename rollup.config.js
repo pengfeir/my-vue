@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-11-16 14:33:53
  * @LastEditors: pengfei
- * @LastEditTime: 2020-11-30 15:41:35
+ * @LastEditTime: 2020-12-01 10:59:01
  */
 import babel from "@rollup/plugin-babel";
 import serve from "rollup-plugin-serve";
@@ -18,10 +18,10 @@ export default {
       exclude: "node_modules/**",
     }),
     serve({
-      port: 3000,
+      port: 5000,
       contentBase: "",
       // openPage: "./index.html",
-      openPage: "./2.html",
+      openPage: "./index.html",
     }),
   ],
 };

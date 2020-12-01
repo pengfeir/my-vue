@@ -1,7 +1,7 @@
 <!--
- * @Date: 2020-11-30 14:39:57
+ * @Date: 2020-12-01 11:31:13
  * @LastEditors: pengfei
- * @LastEditTime: 2020-12-01 11:29:53
+ * @LastEditTime: 2020-12-01 15:19:39
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -24,10 +24,7 @@
         4. 要生成一个真实的dom结构扔到页面中
     -->
     <div id="app">
-      <div>{{obj.name}}</div>
-      <my-button></my-button>
-      <my-button></my-button>
-      <my-button></my-button>
+      <div>{{info}}</div>
     </div>
     <script src="./dist/umd/vue.js"></script>
     <script>
@@ -41,36 +38,29 @@
         el: "#app",
         data() {
           return {
+            name:1,
             obj:{
               name:"皮蛋",
               age:"15"
             }
           };
         },
-        components: {
-          "my-button": {
-            template: "<button>内部按钮</button>",
-          },
+        computed:{
+          info(){
+            console.log('info-computed')
+            return this.obj.name+this.obj.age
+          }
         },
-        // computed:{
-        //   info(){
-        //     return this.obj.name+this.obj.age
-        //   }
-        // },
-        created() {
-          console.log("created3");
-        },
-        mounted() {
-          console.log("mounted");
-        },
-        update() {
-          console.log("updated");
-        },
+        watch:{
+          'name':function(val,oldval){
+              console.log('watch',val,oldval,"=======")
+          }
+        }
       });
       setTimeout(() => {
-        vm.obj.name = "李武"
+        vm.name = "李武"
       },5000);
-      console.log(vm);
+      console.log(vm.info);
       // 1. Vue.component => Vue.extend方法 => 生成子类的构造函数
       // 2. 如果是组件添加了 init hook()  componentOptions => Ctor
       // 3. 创建真实节点时 会调用init钩子 new Ctor().$mount() 内部会再给组件添加一个watcher, 会将渲染的节点放在当前实例上，并且返回
