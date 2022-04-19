@@ -1,7 +1,7 @@
 export function patch(oldVnode, newVnode) {
   if (!oldVnode) {
     return createElm(newVnode); // 根据虚拟节点创建元素
-}
+  }
   const isRealElement = oldVnode.nodeType;
   if (isRealElement) {
     // 真实元素
@@ -19,7 +19,9 @@ export function patch(oldVnode, newVnode) {
 
     if (oldVnode.tag !== newVnode.tag) {
       // 标签名不一致 说明是两个不一样的节点
-      oldVnode.el.parentNode.replaceChild(createElm(newVnode), oldVnode.el);
+      oldVnode.el &&
+        oldVnode.el.parentNode &&
+        oldVnode.el.parentNode.replaceChild(createElm(newVnode), oldVnode.el);
     }
     // 标签一致 div  都是文本 tag = undefined
 
@@ -94,6 +96,7 @@ function updateChildren(parent, oldChildren, newChildren) {
       oldStartVnode = oldChildren[++oldStartIndex];
     } else if (!oldEndVnode) {
       oldEndVnode = oldChildren[--oldEndIndex];
+      //头部节点key，tag相同从头开始比
     } else if (isSameVnode(oldStartVnode, newStartVnode)) {
       //标签和key一致 但是 元素可能属性不一致
       patch(oldStartVnode, newStartVnode); //自身属性 +  递归比较
@@ -158,7 +161,6 @@ function updateChildren(parent, oldChildren, newChildren) {
 
   // 没有key 就直接比较类型，如果类型一样就复用 （隐藏的问题是儿子可能都需要重新创建）
   // 循环时尽量采用唯一的标识 作为key 如果用索引（例如倒叙 会采用索引来复用，不够准确） 如果是静态数据 （你爱用啥用啥）
-
 }
 function createComponent(vnode) {
   let i = vnode.data;
@@ -228,7 +230,7 @@ function updateProperties(vnode, oldProps = {}) {
     }
     // event
     else {
-      el.setAttribute(key, newProps[key]);
+      el && el.setAttribute && el.setAttribute(key, newProps[key]);
     }
   }
 }

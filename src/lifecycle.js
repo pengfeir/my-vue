@@ -17,12 +17,12 @@ export function lifecycleMixin(Vue) {
 
     // 第一次初始化 第二次走diff算法
     const prevVnode = vm._vnode; // 先取上一次的vnode 看下一次是否有
-    vm._vnode = vnode;  // 保存上一次的虚拟节点
     if (!prevVnode) {
-        vm.$el = patch(vm.$el, vnode); // 组件调用patch方法后会产生$el属性    
+        vm.$el = patch(vm.$el, vnode); // 组件调用patch方法后会产生$el属性  
     } else {
         vm.$el = patch(prevVnode, vnode);
     }
+    vm._vnode = vnode;  // 保存上一次的虚拟节点 
   };
 }
 export function callHook(vm, hook) {

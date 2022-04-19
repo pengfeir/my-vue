@@ -5,7 +5,7 @@
  */
 import { defineProperty } from "../utils";
 import { arrayMethods } from "./array";
-import Dep from './dep';
+import Dep from "./dep";
 class Observer {
   constructor(value) {
     this.dep = new Dep();
@@ -33,13 +33,14 @@ class Observer {
     });
   }
 }
-function dependArray(value) { // 就是让里层数组收集外层数组的依赖，这样修改里层数组也可以
+function dependArray(value) {
+  // 就是让里层数组收集外层数组的依赖，这样修改里层数组也可以
   for (let i = 0; i < value.length; i++) {
-      let current = value[i];
-      current.__ob__ && current.__ob__.dep.depend();
-      if (Array.isArray(current)) {
-          dependArray(current);
-      }
+    let current = value[i];
+    current.__ob__ && current.__ob__.dep.depend();
+    if (Array.isArray(current)) {
+      dependArray(current);
+    }
   }
 }
 function defineReactive(data, key, value) {
@@ -47,25 +48,28 @@ function defineReactive(data, key, value) {
   let dep = new Dep(); // 每次都会给属性创建一个dep
   Object.defineProperty(data, key, {
     get() {
+      console.log("get", key);
       if (Dep.target) {
         dep.depend(); // 让这个属性自己的dep记住这个watcher，也要让watcher记住这个dep
 
         // childOb 可能是对象 也可能是数组
-        if (childOb) { // 如果对数组取值 会将当前的watcher和数组进行关联
-            childOb.dep.depend();
-            if (Array.isArray(value)) {
-                dependArray(value)
-            }
+        if (childOb) {
+          // 如果对数组取值 会将当前的watcher和数组进行关联
+          childOb.dep.depend();
+          if (Array.isArray(value)) {
+            dependArray(value);
+          }
         }
-    }
+      }
       return value;
     },
     set(newValue) {
+      console.log("set", key);
       if (newValue === value) return;
       observe(newValue); //如果用户把值改成对象继续监控
       value = newValue;
-      console.log('dep.notify')
-      dep.notify(); //通知dep中记录的watcher让它去执行 
+      console.log("dep.notify");
+      dep.notify(); //通知dep中记录的watcher让它去执行
     },
   });
 }

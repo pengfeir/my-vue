@@ -15,6 +15,7 @@ function parsePath(path) {
       }
       obj = obj[segments[i]];
     }
+    console.log(9999);
     return obj;
   };
 }
@@ -22,16 +23,16 @@ let id = 0; // 做一个watcher 的id 每次创建watcher时 都有一个序号
 // 目前写到这里 只有一个watcher 渲染watchrer，只要视图中使用到了这个属性，而且属性变化了就要更新视图
 class Watcher {
   constructor(vm, exprOrFn, cb, options) {
-    console.log(options,"======")
+    console.log(options, "======");
     this.vm = vm;
     this.exprOrFn = exprOrFn;
     this.cb = cb;
     this.options = options;
     this.user = !!options.user;
-    this.lazy = !!options.lazy
+    this.lazy = !!options.lazy;
     this.deps = []; // 这个watcher会存放所有的dep
     this.depsId = new Set();
-    this.dirty = this.lazy
+    this.dirty = this.lazy;
     if (typeof exprOrFn == "function") {
       this.getter = exprOrFn;
     } else {
@@ -80,7 +81,7 @@ class Watcher {
     let value;
     const vm = this.vm;
     try {
-      console.log(this.getter,this.getter.call(vm, vm))
+      console.log(this.getter, this.getter.call(vm, vm));
       value = this.getter.call(vm, vm);
     } catch (e) {
       if (this.user) {
@@ -102,23 +103,23 @@ class Watcher {
     }
   }
   update() {
-    console.log(this.lazy)
+    console.log(this.lazy);
     if (this.lazy) {
-      this.dirty = true
-    } else{
+      this.dirty = true;
+    } else {
       queueWatcher(this); // 将id不同watcher存储起来调用，做防抖处理节省性能
     }
     // this.get();  //直接掉get方法多次取值赋值会触发多次
   }
-  evaluate () {
-    this.value = this.get()
-    this.dirty = false
+  evaluate() {
+    this.value = this.get();
+    this.dirty = false;
   }
-  depend () {
-    let i = this.deps.length
+  depend() {
+    let i = this.deps.length;
     while (i--) {
-      console.log(this.deps[i],"=====")
-      this.deps[i].depend()
+      console.log(this.deps[i], "=====");
+      this.deps[i].depend();
     }
   }
 }
